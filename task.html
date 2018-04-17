@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html lang="pl-PL">
     <head>
-    
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"> </script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"> </script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    
+    <!-- <link rel="stylesheet" href="/style.css"> -->
 </head>
 <body>
    <div class="container">
        <div class="table-data"> 
         <table class="table table-bordered table-striped" id="employee_table">
+              
                 <tr>
-                    <th> ID </th>
-                    <th> First Name </th>
-                    <th> Last Name </th>
-                    <th> Date of Birth </th>
-                    <th> Company </th>
-                    <th> Note </th>
+                    <th> ID <i class="fa fa-fw fa-sort"></i></th>
+                    <th> First Name <i class="fa fa-fw fa-sort"></i></th>
+                    <th> Last Name <i class="fa fa-fw fa-sort"></i></th>
+                    <th> Date of Birth <i class="fa fa-fw fa-sort"></i></th>
+                    <th> Company <i class="fa fa-fw fa-sort"></i></th>
+                    <th> Note <i class="fa fa-fw fa-sort"></i></th>
                 </tr>
+            
+              
             </table>
         </div>
     
@@ -29,6 +33,7 @@
 
 
     <script>
+// Loading data        
         $(document).ready(function() {
             $.getJSON("data.json", function(data) {
                 var employee_data = '';
@@ -45,17 +50,23 @@
                 });
                 $('#employee_table').append(employee_data);
             });
+            
+            
+        
+// Pagination       
+            
         });
         
         $(document).ready(function(){
             $('#employee_table').after('<div id="nav"></div>');
-            var rowsShown = 5;
-            var rowsTotal = $('#data tbody tr').length;
-            var numPages = rowsTotal/rowsShown;
-            for(i = 0;i < numPages;i++) {
-                var pageNum = i + 1;
-                $('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
-            }
+                var rowsShown = 6;
+                var rowsTotal = $('#employee_table tbody tr').length;
+                var numPages = rowsTotal/rowsShown;
+                for(i = 0;i < numPages;i++) {
+                    var pageNum = i + 1;
+                    $('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
+            
+                }
             $('#employee_table tbody tr').hide();
             $('#employee_table tbody tr').slice(0, rowsShown).show();
             $('#nav a:first').addClass('active');
@@ -66,11 +77,26 @@
             var currPage = $(this).attr('rel');
             var startItem = currPage * rowsShown;
             var endItem = startItem + rowsShown;
-            $('#employee_table tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
+            $('#employee_table tbody tr').css('opacity','1').hide().slice(startItem, endItem).
             css('display','table-row').animate({opacity:1}, 300);
         });
 });
+// Sorting
+        const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+        const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+        v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2))
+        (getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+        document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+        const table = th.closest('#employee_table');
+        Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .forEach(tr => table.appendChild(tr) );
+})));   
         
-        
+// Searching/Filtering
+    
+/* I don't know how to implement filtering to every attribute. Today i'm only able to add search method for the whole table.*/    
     
     </script>

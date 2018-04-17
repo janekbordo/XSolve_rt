@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+    <head>
+    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"> </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+   <div class="container">
+       <div class="table-data"> 
+        <table class="table table-bordered table-striped" id="employee_table">
+                <tr>
+                    <th> ID </th>
+                    <th> First Name </th>
+                    <th> Last Name </th>
+                    <th> Date of Birth </th>
+                    <th> Company </th>
+                    <th> Note </th>
+                </tr>
+            </table>
+        </div>
+    
+    </div>
+</body>
+
+</html>
+
+
+    <script>
+        $(document).ready(function() {
+            $.getJSON("data.json", function(data) {
+                var employee_data = '';
+                $.each(data, function(key, value){
+                    employee_data += '<tr>';
+                    employee_data += '<td>'+value.id+'</td>';
+                    employee_data += '<td>'+value.firstName+'</td>';
+                    employee_data += '<td>'+value.lastName+'</td>';
+                    employee_data += '<td>'+value.dateOfBirth+'</td>';
+                    employee_data += '<td>'+value.company+'</td>';
+                    employee_data += '<td>'+value.note+'</td>';
+                    employee_data += '</tr>';
+                
+                });
+                $('#employee_table').append(employee_data);
+            });
+        });
+        
+        $(document).ready(function(){
+            $('#employee_table').after('<div id="nav"></div>');
+            var rowsShown = 5;
+            var rowsTotal = $('#data tbody tr').length;
+            var numPages = rowsTotal/rowsShown;
+            for(i = 0;i < numPages;i++) {
+                var pageNum = i + 1;
+                $('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
+            }
+            $('#employee_table tbody tr').hide();
+            $('#employee_table tbody tr').slice(0, rowsShown).show();
+            $('#nav a:first').addClass('active');
+            $('#nav a').bind('click', function(){
+
+            $('#nav a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#employee_table tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
+            css('display','table-row').animate({opacity:1}, 300);
+        });
+});
+        
+        
+    
+    </script>

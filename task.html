@@ -5,21 +5,30 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"> </script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script
+			  src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"
+			  integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+			  crossorigin="anonymous"></script>
+			  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
+		
     
     <!-- <link rel="stylesheet" href="/style.css"> -->
 </head>
 <body>
    <div class="container">
        <div class="table-data"> 
-        <table class="table table-bordered table-striped" id="employee_table">
+        <table class="table table-bordered table-striped" id="employee_table" data-locale="en-US" data-filter-control="true">
               
                 <tr>
-                    <th> ID <i class="fa fa-fw fa-sort"></i></th>
-                    <th> First Name <i class="fa fa-fw fa-sort"></i></th>
-                    <th> Last Name <i class="fa fa-fw fa-sort"></i></th>
-                    <th> Date of Birth <i class="fa fa-fw fa-sort"></i></th>
-                    <th> Company <i class="fa fa-fw fa-sort"></i></th>
-                    <th> Note <i class="fa fa-fw fa-sort"></i></th>
+                    <th data-field="id"> ID <i class="fa fa-fw fa-sort"></i></th>
+                    <th data-field="firstName"> First Name <i class="fa fa-fw fa-sort"></i></th>
+                    <th data-field="lastName"> Last Name <i class="fa fa-fw fa-sort"></i></th>
+                    <th data-field="dateOfBirth" data-filter-control="datepicker" data-filter-datepicker-options='{"autoclose":true, "clearBtn": true, "todayHighlight": true}'> Date of Birth <i class="fa fa-fw fa-sort"></i></th>
+                    <th data-field="company"> Company <i class="fa fa-fw fa-sort"></i></th>
+                    <th data-field="note"> Note <i class="fa fa-fw fa-sort"></i></th>
                 </tr>
             
               
@@ -51,11 +60,11 @@
                 $('#employee_table').append(employee_data);
             });
             
-            
+          });          
         
 // Pagination       
             
-        });
+
         
         $(document).ready(function(){
             $('#employee_table').after('<div id="nav"></div>');
@@ -93,10 +102,16 @@
         Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
         .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
         .forEach(tr => table.appendChild(tr) );
-})));   
+        })));   
         
 // Searching/Filtering
+        
+        
+            $('#employee_table').bootstrapTable({
+            
+            });
     
-/* I don't know how to implement filtering to every attribute. Today i'm only able to add search method for the whole table.*/    
+    
+/* I don't know why it is still not working. Wanted to find some solution online and found it but cannot implement it to the code above. */
     
     </script>
